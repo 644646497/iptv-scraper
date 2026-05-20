@@ -2,7 +2,7 @@ import requests
 import time
 from datetime import datetime
 
-# 直播源列表（你可以继续添加）
+# 直播源列表
 SOURCES = [
     "https://raw.githubusercontent.com/fanmingming/live/main/tv/m3u/ipv6.m3u",
     "https://raw.githubusercontent.com/youshandefeiyang/IPTV/main/IPTV.m3u",
@@ -26,7 +26,7 @@ def merge(files):
     for f in files:
         if f:
             lines.extend(f.split('\n'))
-    # 简单去重
+    # 去重
     unique = []
     seen = set()
     for line in lines:
@@ -47,7 +47,13 @@ def main():
     merged = merge(contents)
     with open('live.m3u', 'w') as f:
         f.write(merged)
-    print(f"完成！共 {len([l for l in merged.split('\n') if l.startswith('http')])} 个频道")
+    
+    # 统计频道数
+    count = 0
+    for line in merged.split('\n'):
+        if line.startswith('http'):
+            count += 1
+    print(f"完成！共 {count} 个频道")
 
 if __name__ == "__main__":
     main()
